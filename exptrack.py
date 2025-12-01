@@ -16,27 +16,27 @@ def add_expense(date, category, amount, description):
         [[date, category, amount, description]],
         columns=["Date", "Category", "Amount", "Description"]
     )
-    st.session_state.expenses = pd.concat(
-        [st.session_state.expenses, new_expense], ignore_index=True
+    st.session_state["expenses"] = pd.concat(
+        [st.session_state["expenses"], new_expense], ignore_index=True
     )
 
 def load_expenses():
     uploaded_file = st.file_uploader("Choose a CSV file", type=["csv"])
     if uploaded_file is not None:
-        st.session_state.expenses = pd.read_csv(uploaded_file)
+        st.session_state["expenses"] = pd.read_csv(uploaded_file)
         st.success("Expenses loaded successfully!")
 
 def save_expenses():
-    st.session_state.expenses.to_csv("expenses.csv", index=False)
-    st.success("Expenses saved as expenses.csv")
+   st.session_state["expenses"].to_csv("expenses.csv", index=False)
+st.success("Expenses saved as expenses.csv")
 
 def visualize_expenses():
-    if st.session_state.expenses.empty:
+    if st.session_state["expenses"].empty:
         st.warning("No expenses to visualize.")
         return
 
     fig, ax = plt.subplots()
-    sns.barplot(data=st.session_state.expenses, x="Category", y="Amount", ax=ax)
+    sns.barplot(data=st.session_state["expenses"], x="Category", y="Amount", ax=ax)
     plt.xticks(rotation=45)
     st.pyplot(fig)
 
@@ -62,7 +62,7 @@ with st.sidebar:
     load_expenses()  # File uploader stays visible always
 
 st.header("Expenses Table")
-st.write(st.session_state.expenses)
+st.write(st.session_state["expenses"])
 
 st.header("Visualizations")
 if st.button("Visualize Expenses"):
